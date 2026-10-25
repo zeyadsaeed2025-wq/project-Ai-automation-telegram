@@ -1,0 +1,270 @@
+﻿{
+  "name": "Automation customer service",
+  "type": "SHARED",
+  "summary": "",
+  "description": "",
+  "tags": [],
+  "blogUrl": "",
+  "metadata": {
+    "externalId": "eAPHdKlsFpfPfgCTXmX5I"
+  },
+  "author": "zeyad saeed",
+  "categories": [],
+  "pieces": [
+    "@activepieces/piece-telegram-bot",
+    "@activepieces/piece-ai",
+    "@activepieces/piece-google-sheets"
+  ],
+  "flows": [
+    {
+      "displayName": "Automation customer service",
+      "trigger": {
+        "name": "trigger",
+        "valid": true,
+        "displayName": "customer",
+        "nextAction": {
+          "name": "step_1",
+          "skip": false,
+          "type": "PIECE",
+          "valid": true,
+          "settings": {
+            "input": {
+              "model": "anthropic/claude-opus-4.8",
+              "prompt": "replay to this customer in Arabic customer message is:{{trigger['output']['message']['text']}}",
+              "provider": {
+                "configId": "azJpQJJX2ecSmLS1JtSdO",
+                "provider": "activepieces"
+              },
+              "webSearch": true,
+              "maxOutputTokens": 2000,
+              "webSearchOptions": {
+                "maxUses": 5
+              }
+            },
+            "pieceName": "@activepieces/piece-ai",
+            "actionName": "askAi",
+            "sampleData": {},
+            "pieceVersion": "0.11.0",
+            "propertySettings": {
+              "model": {
+                "type": "MANUAL"
+              },
+              "prompt": {
+                "type": "MANUAL"
+              },
+              "provider": {
+                "type": "MANUAL"
+              },
+              "webSearch": {
+                "type": "MANUAL"
+              },
+              "creativity": {
+                "type": "MANUAL"
+              },
+              "conversationKey": {
+                "type": "MANUAL"
+              },
+              "maxOutputTokens": {
+                "type": "MANUAL"
+              },
+              "webSearchOptions": {
+                "type": "MANUAL",
+                "schema": {
+                  "maxUses": {
+                    "type": "NUMBER",
+                    "required": false,
+                    "description": "For OpenRouter/Activepieces, this maps to OpenRouter web plugin max_results (1-10). Default is 5.",
+                    "displayName": "Max Web Search Uses",
+                    "defaultValue": 5
+                  }
+                }
+              }
+            },
+            "errorHandlingOptions": {
+              "retryOnFailure": {
+                "value": false
+              },
+              "continueOnFailure": {
+                "value": false
+              }
+            }
+          },
+          "nextAction": {
+            "name": "step_3",
+            "skip": false,
+            "type": "PIECE",
+            "valid": true,
+            "settings": {
+              "input": {
+                "auth": "{{connections['r0TEMv2VIMgPcQhV9xp73']}}",
+                "values": {
+                  "A": "{{trigger['output']['message']['text']}}",
+                  "B": "{{step_1['output']}}"
+                },
+                "sheetId": 0,
+                "as_string": false,
+                "spreadsheetId": "1Mkf4Hun9LlIAQrZy4AfDnAEszXhFgjzVPmbHugGRfk8",
+                "first_row_headers": true,
+                "includeTeamDrives": false
+              },
+              "pieceName": "@activepieces/piece-google-sheets",
+              "actionName": "insert_row",
+              "sampleData": {},
+              "pieceVersion": "0.19.0",
+              "propertySettings": {
+                "values": {
+                  "type": "MANUAL",
+                  "schema": {
+                    "A": {
+                      "type": "SHORT_TEXT",
+                      "required": false,
+                      "displayName": "customer service",
+                      "defaultValue": ""
+                    },
+                    "B": {
+                      "type": "SHORT_TEXT",
+                      "required": false,
+                      "displayName": "Ai response",
+                      "defaultValue": ""
+                    }
+                  }
+                },
+                "sheetId": {
+                  "type": "MANUAL"
+                },
+                "as_string": {
+                  "type": "MANUAL"
+                },
+                "spreadsheetId": {
+                  "type": "MANUAL"
+                },
+                "first_row_headers": {
+                  "type": "MANUAL"
+                },
+                "includeTeamDrives": {
+                  "type": "MANUAL"
+                }
+              },
+              "errorHandlingOptions": {
+                "retryOnFailure": {
+                  "value": false
+                },
+                "continueOnFailure": {
+                  "value": false
+                }
+              }
+            },
+            "nextAction": {
+              "name": "step_2",
+              "skip": false,
+              "type": "PIECE",
+              "valid": true,
+              "settings": {
+                "input": {
+                  "auth": "{{connections['BRyVsQaqCGQUUNidsfM2z']}}",
+                  "format": "None",
+                  "chat_id": "{{trigger['output']['message']['chat']['id']}}",
+                  "message": "{{step_1['output']}}",
+                  "reply_markup": {},
+                  "protect_content": false,
+                  "web_page_preview": false,
+                  "disable_notification": false
+                },
+                "pieceName": "@activepieces/piece-telegram-bot",
+                "actionName": "send_text_message",
+                "sampleData": {},
+                "pieceVersion": "0.9.1",
+                "propertySettings": {
+                  "format": {
+                    "type": "MANUAL"
+                  },
+                  "chat_id": {
+                    "type": "MANUAL"
+                  },
+                  "message": {
+                    "type": "MANUAL"
+                  },
+                  "instructions": {
+                    "type": "MANUAL"
+                  },
+                  "reply_markup": {
+                    "type": "MANUAL"
+                  },
+                  "protect_content": {
+                    "type": "MANUAL"
+                  },
+                  "web_page_preview": {
+                    "type": "MANUAL"
+                  },
+                  "message_thread_id": {
+                    "type": "MANUAL"
+                  },
+                  "instructions_format": {
+                    "type": "MANUAL"
+                  },
+                  "reply_to_message_id": {
+                    "type": "MANUAL"
+                  },
+                  "disable_notification": {
+                    "type": "MANUAL"
+                  }
+                },
+                "errorHandlingOptions": {
+                  "retryOnFailure": {
+                    "value": false
+                  },
+                  "continueOnFailure": {
+                    "value": false
+                  }
+                }
+              },
+              "displayName": "Send Text Message",
+              "lastUpdatedDate": "2026-10-23T21:04:15.514Z"
+            },
+            "displayName": "Add Row",
+            "lastUpdatedDate": "2026-10-23T21:04:15.514Z"
+          },
+          "displayName": "Ask AI",
+          "lastUpdatedDate": "2026-10-23T21:04:15.513Z"
+        },
+        "lastUpdatedDate": "2026-10-23T21:04:15.513Z",
+        "type": "PIECE_TRIGGER",
+        "settings": {
+          "sampleData": {},
+          "propertySettings": {
+            "update_types": {
+              "type": "MANUAL"
+            },
+            "trigger_notes": {
+              "type": "MANUAL"
+            }
+          },
+          "pieceName": "@activepieces/piece-telegram-bot",
+          "pieceVersion": "0.9.1",
+          "triggerName": "new_telegram_message",
+          "input": {
+            "auth": "{{connections['BRyVsQaqCGQUUNidsfM2z']}}",
+            "update_types": [
+              "message",
+              "edited_message",
+              "channel_post",
+              "edited_channel_post",
+              "callback_query",
+              "inline_query",
+              "chosen_inline_result",
+              "poll",
+              "poll_answer",
+              "my_chat_member",
+              "chat_member",
+              "chat_join_request"
+            ]
+          }
+        }
+      },
+      "valid": true,
+      "schemaVersion": "28",
+      "notes": []
+    }
+  ],
+  "status": "PUBLISHED"
+}
